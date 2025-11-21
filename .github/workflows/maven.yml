@@ -3,36 +3,32 @@ name: Build & Deploy Spring Boot to Windows Server
 on:
   push:
     branches:
-      - main   # Trigger on pushes to main branch
+      - main
 
 jobs:
   deploy:
-    runs-on: self-hosted   # Uses your Windows self-hosted runner
+    runs-on: self-hosted
 
     steps:
-      # 1 Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2 Setup Java 17
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      # 3 Build Spring Boot JAR
       - name: Build JAR
         run: mvn clean package -DskipTests
+        shell: cmd
 
-      # 4 Copy JAR to deploy folder
       - name: Copy JAR to Deploy Folder
         run: |
-          mkdir "C:\deploy" -ErrorAction SilentlyContinue
+          if not exist "C:\deploy" mkdir "C:\deploy"
           copy /Y "%CD%\target\cicd-0.0.1-SNAPSHOT.jar" "C:\deploy\cicd-0.0.1-SNAPSHOT.jar"
-        shell: powershell
+        shell: cmd
 
-      # 5 Call deploy.cmd to start the app
       - name: Deploy Application
         run: C:\deploy\deploy.cmd
         shell: cmd

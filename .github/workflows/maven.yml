@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Java 17
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -23,7 +23,12 @@ jobs:
         run: mvn clean package -DskipTests
         shell: cmd
 
-      - name: Run PowerShell Deploy Script
+      - name: Copy JAR to Deploy Folder
         run: |
-          powershell.exe -ExecutionPolicy Bypass -File "C:\Users\CCS\deploy\deploy.ps1"
+          if not exist "C:\deploy" mkdir "C:\deploy"
+          copy /Y "%CD%\target\cicd-0.0.1-SNAPSHOT.jar" "C:\Users\CCS\deploy\cicd-0.0.1-SNAPSHOT.jar"
+        shell: cmd
 
+      - name: Deploy Application
+        run: C:\deploy\deploy.cmd
+        shell: cmd

@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Setup Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -25,10 +25,10 @@ jobs:
 
       - name: Copy JAR to Deploy Folder
         run: |
-          if not exist "C:\deploy" mkdir "C:\deploy"
-          copy /Y "%CD%\target\cicd-0.0.1-SNAPSHOT.jar" "C:\Users\CCS\deploy\cicd-0.0.1-SNAPSHOT.jar"
+          if not exist "C:\Users\CCS\deploy" mkdir "C:\Users\CCS\deploy"
+          copy /Y "%CD%\target\cicd-0.0.1-SNAPSHOT.jar" "C:\Users\CCS\deploy\cicd.jar"
         shell: cmd
 
-      - name: Deploy Application
+      - name: Run Deployment Script
         run: C:\Users\CCS\deploy\deploy.cmd
         shell: cmd

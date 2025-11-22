@@ -11,7 +11,7 @@ public class CicdApplication {
 
 	@GetMapping("/hello")
 	public String name() {
-		return"hello-test";
+		return"hello-test789";
 	}
 	
 	public static void main(String[] args) {
